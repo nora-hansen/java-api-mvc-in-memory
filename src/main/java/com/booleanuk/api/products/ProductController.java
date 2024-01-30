@@ -29,8 +29,8 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody Product product) {               // How to check integer value present?
-        if(product.getCategory() == null || product.getName()  == null /*|| product.getPrice() == null*/)
+    public Product create(@RequestBody Product product) {
+        if(product.getCategory() == null || product.getName()  == null || product.getPrice() == 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One or more fields are null");
         return this.productRepo.addOne(product);
     }
@@ -38,7 +38,7 @@ public class ProductController {
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Product update(@PathVariable int id, @RequestBody Product product)   {
-        if(product.getCategory() == null || product.getName()  == null /*|| product.getPrice() == null*/)
+        if(product.getCategory() == null || product.getName()  == null || product.getPrice() == 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One or more fields are null");
         return this.productRepo.updateOne(id, product);
     }
