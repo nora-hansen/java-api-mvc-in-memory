@@ -16,7 +16,9 @@ public class ProductController {
     }
 
     @GetMapping
-    public ArrayList<Product> getAll()  {
+    public ArrayList<Product> getAll(@RequestParam (required = false) String category)  {
+        if(category != null)
+            return this.productRepo.findAll(category);
         return this.productRepo.findAll();
     }
 
@@ -40,6 +42,8 @@ public class ProductController {
     public Product update(@PathVariable int id, @RequestBody Product product)   {
         if(product.getCategory() == null || product.getName()  == null || product.getPrice() == 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One or more fields are null");
+        if(this.productRepo.findOneProduct(id) == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
         return this.productRepo.updateOne(id, product);
     }
 

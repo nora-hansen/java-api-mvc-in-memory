@@ -16,6 +16,17 @@ public class ProductRepository {
         return this.products;
     }
 
+    public ArrayList<Product> findAll(String category) {
+        ArrayList<Product> productsFiltered = new ArrayList<>();
+        for(Product product : this.products)    {
+            if(product.getCategory().equalsIgnoreCase(category))
+                productsFiltered.add(product);
+        }
+        if(productsFiltered.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return productsFiltered;
+    }
+
     public Product findOneProduct(int id)   {
         for(Product product : this.products)    {
             if(product.getID() == id)
@@ -25,11 +36,23 @@ public class ProductRepository {
     }
 
     public Product addOne(Product product)  {
+        for(Product p : this.products)
+        {
+            if(p.getName().equals(product.getCategory()))
+
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists");
+        }
         this.products.add(product);
         return product;
     }
 
     public Product updateOne(int id, Product product)   {
+        for(Product p : this.products)
+        {
+            if(p.getName().equals(product.getCategory()))
+
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists");
+        }
         Product productToUpdate = findOneProduct(id);
         if(productToUpdate != null) {
             productToUpdate.setName(product.getName());
